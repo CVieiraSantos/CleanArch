@@ -61,16 +61,16 @@ namespace CleanArchMvc.Application.Services
             return _mapper.Map<IEnumerable<ProductDTO>>(result);
         }
 
-        public async Task Remove(int id)
+        public async Task Remove(int? id)
         {
-            var product = _productRepository.GetByIdAsync(id).Result;
-            await _productRepository.RemoveProductAsync(product);
+            var productRemoveCommand = new ProductRemoveCommand(id.Value);
+            await _mediator.Send(productRemoveCommand);
         }
 
         public async Task Update(ProductDTO productDTO)
         {
-            var product = _mapper.Map<Product>(productDTO);
-            await _productRepository.UpdateProductAsync(product);
+            var productUpdateCommand = _mapper.Map<ProductUpdateCommand>(productDTO);
+            await _mediator.Send(productUpdateCommand);
         }
     }
 }
